@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+
+		<title>Requisições Assincronas</title>
+		
+		<!-- bootstrap - link cdn -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script>
+			function req(url) {
+				document.getElementById('conteudo').innerHTML = ''
+
+				if (!document.getElementById('l')) {
+				//incluir gif de loading
+				let imgload = document.createElement('img')
+				imgload.id = 'l'
+				imgload.src = 'loading.gif'
+				imgload.className = 'rounded mx-auto d-block'
+
+				document.getElementById('conteudo').appendChild(imgload)
+				}
+
+				// cria um objeto client
+				let ajax = new XMLHttpRequest();
+
+
+				//requisição não inciada, state = 0
+				//console.log(ajax.readyState)
+
+				// captura endereço
+				ajax.open('GET', url)
+
+				//conexão estabelecida com o servidor, state = 1
+				//console.log(ajax.readyState)
+
+
+				// olha o progresso da requisição, gerencia mudança de estado internamente
+				ajax.onreadystatechange = () => {
+					if(ajax.readyState == 4 && ajax.status == 200) {
+						// o inner atualizado o conteudo interno de um elemendo, nesse caso sobrepondo o mesmo tornando desnecessário o remove()... e diferente do appendeChild que adiciona um nó filho ao lemento pai
+						document.getElementById('conteudo').innerHTML =
+						ajax.responseText
+						console.log('Req Finalizada, o status eé 200')
+						//document.getElementById('l').remove()
+
+					} else {
+						document.getElementById('conteudo').innerHTML = 'Conteudo não recuperado, tente novamente em instantes'
+					}
+
+				}
+
+				//envia requisição
+				ajax.send()
+				//console.log(ajax)
+		}
+		</script>
+	</head>
+
+	<body>
+
+		<!-- Static navbar -->
+	    <nav class="navbar navbar-light bg-light mb-4">
+	      <div class="container">
+	        <div class="navbar-brand mb-0 h1">
+	        	<h3>Requisições síncronas e assíncronas</h3>
+	        </div>
+	      </div>
+	    </nav>
+
+
+	    <div class="container">
+
+	    	<div class="row mb-2">
+	    		<div class="col-md-4 center"></div>
+	    		<div class="col-md-4 center">
+	    			<a href="#" class="btn btn-primary" onclick="req('pagina_1_conteudo.php')">Página 1</a>
+	    			<a href="#" class="btn btn-primary" onclick="req('pagina_2_conteudo.html')">Página 2</a>
+	    			<a href="#" class="btn btn-primary" onclick="req('pagina_3_conteudo.html')">Página 3</a>
+	    		</div>
+	    		<div class="col-md-4 center"></div>
+	    	</div>
+	    	
+	    	<div class="row">
+		    	<div class="col-md-1"></div>
+
+		    	<div class="col-md-10" id="conteudo" align="center">
+		    			
+		    	</div>
+		    		
+				<div class="col-md-1"></div>
+			</div>
+
+		</div>	
+	</body>
+</html>
